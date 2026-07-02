@@ -23,7 +23,7 @@
   #viz{flex:1 1 auto;position:relative}
   svg{width:100%;height:100%;display:block}
   #panel{width:0;overflow:hidden;transition:width .2s;border-left:1px solid var(--line);background:#fafcfd}
-  #panel.open{width:min(46vw,660px);overflow:auto}
+  #panel.open{width:min(72vw,1040px);overflow:auto}
   .ptop{position:sticky;top:0;background:#fafcfd;padding:12px 14px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center}
   table{border-collapse:collapse;width:100%;font-size:12px}
   th,td{border:1px solid #e2e9ee;padding:5px 7px;text-align:left;vertical-align:top}
@@ -344,17 +344,26 @@ function renderDataTable(){
   wrap.innerHTML=`<table><thead><tr><th>Code</th><th>Initiative</th><th>Horizon</th><th>Dependency</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 function buildTable(){
+  const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const rows=NODES.map((n,i)=>`<tr data-i="${i}">
-    <td contenteditable data-k="id">${n.id}</td>
-    <td contenteditable data-k="l">${n.l}</td>
-    <td contenteditable data-k="h">${n.h}</td></tr>`).join('');
+    <td contenteditable data-k="id" style="width:42px;text-align:center;font-weight:700">${n.id}</td>
+    <td contenteditable data-k="l" style="min-width:180px">${esc(n.l)}</td>
+    <td contenteditable data-k="h" style="width:54px">${n.h}</td>
+    <td style="padding:3px;min-width:320px"><textarea data-k="scope" style="width:100%;min-height:68px;font:11px/1.5 monospace;border:1px solid #e2e9ee;border-radius:3px;padding:4px 6px;resize:vertical;background:#fff;box-sizing:border-box">${esc(SCOPE[n.id]||'')}</textarea></td>
+    </tr>`).join('');
   document.getElementById('tblNodes').innerHTML=
-    `<table><thead><tr><th>Code</th><th>Initiative</th><th>Horizon<br><span style="font-weight:400;color:#6b7d8a">short/mid/long</span></th></tr></thead><tbody>${rows}</tbody></table>`;
+    `<table><thead><tr><th style="width:42px">Code</th><th>Initiative Title</th><th style="width:54px">Horizon<br><span style="font-weight:400;color:#6b7d8a">short/mid/long</span></th><th>Scope &amp; Description</th></tr></thead><tbody>${rows}</tbody></table>`;
   document.querySelectorAll('#tblNodes td[contenteditable]').forEach(td=>{
     td.addEventListener('blur',()=>{
       const i=+td.closest('tr').dataset.i,k=td.dataset.k,v=td.textContent.trim();
       NODES[i][k]=v; if(k==='id')NODES[i].cat=v[0];
       draw();
+    });
+  });
+  document.querySelectorAll('#tblNodes textarea[data-k="scope"]').forEach(ta=>{
+    ta.addEventListener('blur',()=>{
+      const i=+ta.closest('tr').dataset.i;
+      SCOPE[NODES[i].id]=ta.value;
     });
   });
   document.getElementById('depEdit').value=DEPS.map(d=>d.join(',')).join('\n');
