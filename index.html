@@ -76,21 +76,21 @@
 </section>
 <script>
 let NODES = [
-  ["1a","Industry-specific packages & pitchbooks"],
+  ["1a","Develop industry-specific packages and pitchbooks"],
   ["1b","Renegotiate margin-dilutive contracts"],
-  ["1c","Raise monthly fees on existing customers & restructure new-customer contracts"],
-  ["1d","Discover high-CLTV, high-value white space opportunities across captive & non-captive market"],
-  ["1e","Set up a customer-centric product innovation & lifecycle management workflow"],
-  ["1f","Bundle cyber security-adjacent services"],
+  ["1c","Raise monthly fees on existing customers and restructure new-customer contracts"],
+  ["1d","Discover high-CLTV, high-value white space opportunities across captive and non-captive markets"],
+  ["1e","Set up a customer-centric product innovation and lifecycle management workflow"],
+  ["1f","Bundle cyber and security-adjacent services"],
   ["1g","Scale standardized, low-cost, self-install products"],
-  ["1h","Develop advanced tech-driven offerings"],
+  ["1h","Develop advanced technology-driven offerings"],
   ["2a","Define customer tiers with standard management playbooks by value"],
   ["2b","Systemize proactive customer management"],
-  ["2c","Effective customer management by CM team"],
+  ["2c","Effective customer management through dedicated Customer Management team"],
   ["3a","Industry-specialized sales teams"],
-  ["3b","Penetration target-setting & execution"],
+  ["3b","Penetration target-setting and execution"],
   ["3c","Redesign sales incentives around CLTV"],
-  ["3d","Transition of in-house sales reps to agency channel"],
+  ["3d","Transition of in-house sales representatives to agency channel"],
   ["3e","Scale online sales channel"],
   ["3f","Widen sales-coverage areas by easing geofence limits"],
   ["4a","Apply AI to detect and reduce false alarms"],
@@ -100,22 +100,64 @@ let NODES = [
   ["4e","Automate monitoring-center video surveillance"],
   ["4f","Revamp the security platform (IoT platform, Argos)"],
   ["4g","Develop next-generation security technologies"],
-  ["5a","Construct CLTV single source of truth & decision-making rules"],
+  ["5a","Construct CLTV single source of truth (SSOT) and decision-making rules"],
   ["5b","Build digital sales tools (Vision360)"],
   ["5c","Optimize field operations (BP/TSE) using data"],
-  ["5d","Establish a holistic Business Intelligence system"],
-  ["5e","Revamp C360 to analyze customers, predict churn, target retention/upselling"],
+  ["5d","Establish a holistic business intelligence system"],
+  ["5e","Revamp C360 to analyze customers, predict churn, and target retention/upselling"],
   ["5f","Set up a data governance process"],
   ["6a","Orchestrate ERP and agency transition plan"],
   ["6b","Redefine R&R and evaluation scheme of field operations (BP/TSE)"],
   ["6c","Establish a centralized logistics center"],
   ["6d","Streamline back-office function"],
   ["6e","Conduct organizational diagnostics"],
-  ["6f","Establish culture & engagement baseline"],
+  ["6f","Establish culture and engagement baseline"],
   ["6g","Reshape workforce operating model"],
-  ["6h","Redesign performance management & pay-for-performance"],
-  ["6i","Win, build & upskill talent – 4B talent & Leadership"],
+  ["6h","Redesign performance management and pay-for-performance"],
+  ["6i","Win, build and upskill talent — 4B talent and leadership"],
 ].map(r=>({id:r[0],l:r[1],cat:r[0][0]}));
+
+const SCOPE={
+  "1a":"Build and distribute pitchbooks for the 4 prioritized verticals to help sales reps meet target sales, covering each vertical's customer needs, pain points, hooking messages, and differentiation vs. competitors\n• Manufacturing, Smart Order, healthcare, public institutions",
+  "1b":"Restore profitability on margin-dilutive existing contracts, especially on other financial-institution accounts (e.g., ATM) with negative CLTV ('NICE' Case)\n• Negotiated to uplift monthly fee by 11M total\n• Demarketed 4,000 VAN contracts (28% of total 14K)",
+  "1c":"Improve SKS profitability through systematic price increases for existing customers and price increase levers for new customers\n• (Existing cust.) Opt-out based price increase requests\n• (New cust.) Enhancement of base RMR setting, multiplier application\n• (New cust.) Charging standard pricing for \"currently free\" add-ons\n• (New cust.) T&C duration extension, programmed price increases",
+  "1d":"Identify and validate high-value growth opportunities in emerging and underserved market segments\n• Emerging verticals with strong growth potential (e.g., data centers)\n• Demographic and societal trends creating new security needs (e.g., elderly care facilities)\n• Across non-captive & captive demand opportunities across the SK Group ecosystem",
+  "1e":"Set up a customer-centric product innovation workflow that:\n• Detects emerging operational/security risks in a timely, systematic manner and integrates market insights into new product development\n• Enables customers to proactively address emerging risks ahead of competitors, creating a sustainable competitive advantage",
+  "1f":"Bundle physical, cyber, and cyber-physical security with security-adjacent services into integrated enterprise packages\n• Combine currently-siloed physical and cyber-physical security into unified enterprise packages\n• Expand into untapped adjacencies (e.g., energy/utility monitoring, ESG/environmental compliance, occupancy/space analytics, EHS)",
+  "1g":"Scale standardized, low-cost, self-install (DIY) products for price-sensitive segments\n• Standardize a low-cost product line without monitoring & dispatch for price-sensitive segments\n• Replace rep-led design/installation with customer self-install\n• Distribute through low-touch channels (online, retail, partners)",
+  "1h":"Advance high-value offerings from commoditized hardware to differentiated, tech-enabled solutions\n• Shift high-value verticals from commoditized hardware to integrated solutions\n• Embed advanced capabilities (AI analytics, predictive/preventive security, platform integration)",
+  "2a":"Segment customers by CLTV and ARPU and deploy differentiated management scheme per tier to right-size effort to value\n• [Tier A]: High-touch, hands-on management by regional strategic and branch sales reps, with regular review cadence\n• [Tier B/C]: Centrally managed by dedicated CM team (see 2c), maximizing non-face-to-face and digital channels",
+  "2b":"Systemize proactive management for high-value accounts, to protect and grow the most valuable relationships\n• Shift from reactive to proactive management\n• Use early-warning signals (usage, payment, service, engagement) to flag at-risk and growth accounts before churn\n• Drive account plans for upsell/cross-sell on high-value accounts",
+  "2c":"Establish a dedicated CM team to efficiently manage the previously under-served B/C tiers and optimize in-house sales focusing on high-value activities\n• Define CM team R&R, required FTEs and operating governance\n• Implement C360 to facilitate customer insight and engagement",
+  "3a":"After the agency transition, assign top 20% performers among remaining sales reps with more than 50% of sales generated from prioritized verticals to Regional Strategy\n• Regional strategy drives direct sales in prioritized verticals and acts as PMs, supporting branches to expand high-value vertical sales",
+  "3b":"Set Gross Add targets by vertical for the 4 prioritized high-value verticals, sized from region × vertical penetration gaps\n• Target set at vertical-average PTR for under-penetrated regions\n• For Smart Order, target set at national market average self-order terminal adoption rate among restaurant clients by '28",
+  "3c":"Redesign sales incentives into a payout matrix that varies by two axes — monthly fee tier and product tier\n• Payout rates scale up to 150% for higher-fee, high-value contracts\n• Payout rates as low as 50% for low-fee, low-value contracts\n• Incentive structure rewards contract value rather than volume",
+  "3d":"Convert low-performing sales reps across Regional strategy and Branch sales into high-productivity agencies, while supporting their successful onboarding and growth as agencies",
+  "3e":"Move beyond traditional door-to-door sales by scaling online channels under a clear CLTV-based pricing framework to expand geographic reach and customer coverage",
+  "3f":"Remove geofence restrictions to expand the reach of top-performers, while preventing free-riding and inflated performance recognition by assigning sales credit and SIP exclusively to contract owners",
+  "4a":"Minimize false alarm rate by adopting AI in detection\n• Reduce false alarms and unnecessary dispatches while maintaining security effectiveness\n• Reinvest operational savings into service quality improvements and broader operational excellence initiatives",
+  "4b":"Apply AI agents and RPA (Robotic Process Automation) to repetitive reviews and administrative tasks\n• Capture a technology-enabled efficiency layer beyond Phase I organizational redesign",
+  "4c":"Enhance and develop related IT systems, including ERP, Blue Code, and Blue Supplier, to enable key functionalities required for integrated logistics operations (Initiative 6d), such as real-time inventory optimization and shipment tracking",
+  "4d":"Transform ERP into the enterprise backbone that:\n• Enables execution of the new GTM through integrated target-setting, performance management, and incentive mechanisms\n• Consolidates data across core business systems into a single source of truth for decision-making and operations mgmt.",
+  "4e":"Deploy AI-powered automated monitoring capabilities that:\n• Detect and prioritize security incidents in real time, enabling faster and more consistent responses\n• Reduce monitoring-center workload and operating costs, freeing resources for service and operational improvements",
+  "4f":"Build a unified security IT platform that:\n• Seamlessly integrates signals and information across connected devices and systems, enabling faster, more accurate responses\n• Optimize fleet-wide operations through intelligent resource orchestration, routing, and deployment",
+  "4g":"Develop and launch next-generation security solutions that:\n• Proactively catches emerging customer needs and evolving security risks\n• Deliver superior security outcomes through more efficient and effective technologies",
+  "5a":"Build a CLTV data foundation (first time measuring CLTV) and establish the rules and process for using it in decisions and keeping it continuously updated",
+  "5b":"Build a digital tool and dashboard (Vision360) that:\n• Gives HQ and RHQ a region × vertical view of TAM, penetration, and whitespace to set and track branch targets\n• Equips each branch with an actionable prospect list by vertical, so reps spend time selling rather than finding leads",
+  "5c":"Improve BP workforce efficiency through GPS-based workload optimization and predictive modeling, enabling data-driven realignment of dispatch territories and reducing FTEs",
+  "5d":"Consolidate fragmented data across functions into a unified BI platform giving HQ, RHQ, and branch leaders a single, real-time view of business performance for data-driven decision making",
+  "5e":"Upgrade C360 into a proactive intelligence system that provides holistic customer insight based on interaction history, predicts churn risk, and assists retention/upselling referencing customer information and sentiment",
+  "5f":"Establish data foundation enabling all data-dependent initiatives\n• Define data ownership by domain, setting quality standards and remediation protocols\n• Setup governance body to enforce consistency across all data assets",
+  "6a":"Orchestrate a structured, sequenced workforce transition across two parallel tracks:\n• Sales → agency conversion\n• BP/TSE → natural attrition & hiring freeze\n• Others → ERP",
+  "6b":"Enhance operational productivity and workforce efficiency by the clear division of R&R between BP and TSE\n• BPs streamlined to focus on dispatch operations\n• TSEs assumed responsibility for installation, AS service, and technical support activities",
+  "6c":"Increase operational efficiency and lower logistics outsourcing costs\n• Centralizing material mgmt. and shifting from bulk deliveries to branches toward project-based delivery operations",
+  "6d":"Consolidate fragmented, duplicated, and non-core manual work into a leaner support organization\n• 734 employees across 5 divisions, 5 HQs, 2 Deputy CFO organizations, 10 regional HQs, 21 groups, and 80 teams",
+  "6e":"Objective baseline of structure and leadership capability before scaling change\n• (1) Structure: span-of-control, layers & Org. Network Analysis across Physical · Cyber · Convergence\n• (2) Leadership: define a success profile and assess people-managers & the leadership group against it",
+  "6f":"The measurable starting line for the high-performing-culture pillar\n• Enterprise engagement & culture baseline survey: Vision, Leadership, Change mgmt, Org. Structure, IT/Tech, Talent & Development, Culture, engagement and values: SK Shieldus",
+  "6g":"Define what work is done, by whom, in what structure and governance\n• Target operating model for the post-optimization organization — sourcing logic (in-house · BP · agency · AI), role architecture and decision rights",
+  "6h":"Revisit the performance management system\n• Goal cascading, role-based assessment, pay-for-performance and data-driven decisions on a psychological-safety foundation, sustaining a high-performing culture",
+  "6i":"Build the talent engine for sustained growth\n• 4B: Build · Buy · Borrow · Bind — with critical-role succession, a leadership accelerator, AI/digital upskilling and EVP redesign",
+};
 
 /* time horizon per initiative (from slide shading): short=blue, mid=light grey, long=dark grey */
 const HZ={
@@ -227,14 +269,15 @@ function draw(){
     .attr('class','link')
     .attr('d',d=>{const s=nmap[d[0]],t=nmap[d[1]];const cx=(s.x+t.x)*0.3,cy=(s.y+t.y)*0.3;return `M${s.x},${s.y} Q${cx},${cy} ${t.x},${t.y}`;});
 
+  const NODE_R=20, GAP=14, OFF=NODE_R+GAP;
+
   const nodeSel=root.append('g').selectAll('g').data(ordered).join('g')
     .attr('class','node').attr('transform',n=>`translate(${n.x},${n.y})`);
-  nodeSel.append('circle').attr('r',24).attr('fill',n=>HZCOL[n.h]);
+  nodeSel.append('circle').attr('r',NODE_R).attr('fill',n=>HZCOL[n.h]);
   nodeSel.append('text').attr('class','code').attr('text-anchor','middle').attr('dy','.32em')
     .attr('fill',n=>n.h==='mid'?'#1a2b38':'#fff').text(n=>n.id);
 
   /* labels rotated to the node's radial angle; always offset OUTWARD, text kept upright */
-  const NODE_R=24, GAP=14, OFF=NODE_R+GAP;
   nodeSel.each(function(n){
     const deg=n.angle*180/Math.PI, flip=(deg>90||deg<-90);
     // rotate to spoke, move outward by OFF; if left half, rotate text 180° in place to stay upright
@@ -269,8 +312,12 @@ function draw(){
       ...DEPS.filter(l=>l[0]===d.id).map(l=>l[1]),
       ...DEPS.filter(l=>l[1]===d.id).map(l=>l[0])
     ])].join(', ')||'—';
+    const sc=SCOPE[d.id]
+      ?`<div style="margin:6px 0 4px;padding-top:6px;border-top:1px solid rgba(255,255,255,.2);font-size:13px;line-height:1.5;opacity:.88">${SCOPE[d.id].replace(/\n/g,'<br>')}</div>`
+      :'';
     tip.innerHTML=`<b>${d.id}</b> ${d.l}<br><span style="opacity:.7">${HZNAME[d.h]}</span>`
-      +`<br><span style="color:#8fd3f4">Dependency:</span> ${rel}`;
+      +sc
+      +`<div style="margin-top:4px;font-size:13px"><span style="color:#8fd3f4">Dependencies:</span> ${rel}</div>`;
     tip.style.opacity=1;
   }
   function clear(){nodeSel.classed('dim',false);linkSel.classed('hi',false).classed('dim',false);tip.style.opacity=0;}
