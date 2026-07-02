@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategy House — Radial Network</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root{--navy:#051C2C;--sky:#22A3DF;--ink:#1a2b38;--muted:#6b7d8a;--line:#c9d6df;--bg:#ffffff;--vision:#051C2C}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Pretendard","SUIT",-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:16px 24px 4px}
+  h1{margin:0;font-size:21px;color:var(--navy);font-weight:700;letter-spacing:-.01em}
+  .sub{margin:4px 0 0;color:var(--muted);font-size:13px;max-width:920px}
+  .bar{display:flex;gap:16px;flex-wrap:wrap;align-items:center;padding:10px 24px;font-size:12.5px}
+  .cats{display:inline-flex;gap:12px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:12px;height:12px;border-radius:50%}
+  button{font:inherit;font-size:12.5px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:6px 12px;border-radius:7px;cursor:pointer}
+  button:hover{border-color:var(--sky);color:var(--sky)}
+  button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  #main{display:flex;height:calc(100vh - 150px);min-height:600px}
+  #viz{flex:1 1 auto;position:relative}
+  svg{width:100%;height:100%;display:block}
+  #panel{width:0;overflow:hidden;transition:width .2s;border-left:1px solid var(--line);background:#fafcfd}
+  #panel.open{width:min(46vw,660px);overflow:auto}
+  .ptop{position:sticky;top:0;background:#fafcfd;padding:12px 14px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center}
+  table{border-collapse:collapse;width:100%;font-size:12px}
+  th,td{border:1px solid #e2e9ee;padding:5px 7px;text-align:left;vertical-align:top}
+  th{background:#eef4f8;position:sticky;top:53px;font-weight:600;color:var(--navy)}
+  td[contenteditable]:focus{outline:2px solid var(--sky);background:#fff}
+  .link{fill:none;stroke:#7fb8dd;stroke-width:2.6px;opacity:.55}
+  .link.hi{stroke:var(--sky);stroke-width:4px;opacity:1}
+  .link.dim{opacity:.06}
+  .spoke{stroke:#e3ebf0;stroke-width:1px;fill:none}
+  .node circle{stroke:#fff;stroke-width:1.6px;cursor:pointer}
+  .node text.code{font-size:16px;font-weight:700;fill:#fff;pointer-events:none}
+  .node text.lbl{font-size:19px;fill:var(--ink);pointer-events:none}
+  .node.dim{opacity:.15}
+  .tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;padding:11px 14px;border-radius:8px;font-size:17px;max-width:440px;line-height:1.4;opacity:0;transition:.1s;z-index:20}
+  .note{padding:8px 14px;color:var(--muted);font-size:11.5px}
+  textarea{width:100%;height:150px;font:12px/1.4 monospace;border:1px solid var(--line);border-radius:6px;padding:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Strategy House — Radial Network of Initiatives</h1>
+  <p class="sub">39 initiatives placed on three concentric rings by time horizon (short = inner, long = outer), colored by horizon. Angular position preserved by category grouping. Curved links = cross-initiative dependencies. Hover to trace; click to isolate; edit live.</p>
+</header>
+<div class="bar">
+  <div class="cats" id="legend"></div>
+  <span style="color:var(--line)">|</span>
+  <button id="btnDep" class="on">Show dependencies</button>
+  <button id="btnTable">Edit data ▸</button>
+  <button id="btnExport">Export CSV</button>
+</div>
+<div id="main">
+  <div id="viz"><div class="tip" id="tip"></div></div>
+  <div id="panel">
+    <div class="ptop"><b>Editable data</b> <span style="color:var(--muted);font-size:11px">— edit cells, redraws instantly</span>
+      <button id="btnClose" style="margin-left:auto">Close ✕</button></div>
+    <div class="note">Nodes — Code · Initiative · Category</div>
+    <div id="tblNodes"></div>
+    <div class="note" style="margin-top:6px">Dependencies — one per line: <code>source,target</code></div>
+    <textarea id="depEdit" spellcheck="false"></textarea>
+    <div style="padding:8px 14px"><button id="btnApplyDep">Apply dependencies</button></div>
+  </div>
+</div>
+<section id="dataSection" style="padding:8px 24px 40px">
+  <div style="display:flex;align-items:center;gap:12px;margin:8px 0">
+    <h2 style="font-size:16px;color:var(--navy);margin:0">Data table</h2>
+    <button id="btnToggleData" class="on" style="font-size:12px">Hide table</button>
+    <span style="color:var(--muted);font-size:12px">39 initiatives · reflects the diagram; use “Edit data ▸” above to change values</span>
+  </div>
+  <div id="dataTableWrap"></div>
+</section>
+<script>
+let NODES = [
+  ["1a","Industry-specific packages & pitchbooks"],
+  ["1b","Renegotiate margin-dilutive contracts"],
+  ["1c","Raise monthly fees on existing customers & restructure new-customer contracts"],
+  ["1d","Discover high-CLTV, high-value white space opportunities across captive & non-captive market"],
+  ["1e","Set up a customer-centric product innovation & lifecycle management workflow"],
+  ["1f","Bundle cyber security-adjacent services"],
+  ["1g","Scale standardized, low-cost, self-install products"],
+  ["1h","Develop advanced tech-driven offerings"],
+  ["2a","Define customer tiers with standard management playbooks by value"],
+  ["2b","Systemize proactive customer management"],
+  ["2c","Effective customer management by CM team"],
+  ["3a","Industry-specialized sales teams"],
+  ["3b","Penetration target-setting & execution"],
+  ["3c","Redesign sales incentives around CLTV"],
+  ["3d","Transition of in-house sales reps to agency channel"],
+  ["3e","Scale online sales channel"],
+  ["3f","Widen sales-coverage areas by easing geofence limits"],
+  ["4a","Apply AI to detect and reduce false alarms"],
+  ["4b","Adopt automation and AI tools to streamline back-office"],
+  ["4c","Build SCM IT systems to optimize supply chain and logistics"],
+  ["4d","Improve ERP system to support the new GTM strategy"],
+  ["4e","Automate monitoring-center video surveillance"],
+  ["4f","Revamp the security platform (IoT platform, Argos)"],
+  ["4g","Develop next-generation security technologies"],
+  ["5a","Construct CLTV single source of truth & decision-making rules"],
+  ["5b","Build digital sales tools (Vision360)"],
+  ["5c","Optimize field operations (BP/TSE) using data"],
+  ["5d","Establish a holistic Business Intelligence system"],
+  ["5e","Revamp C360 to analyze customers, predict churn, target retention/upselling"],
+  ["5f","Set up a data governance process"],
+  ["6a","Orchestrate ERP and agency transition plan"],
+  ["6b","Redefine R&R and evaluation scheme of field operations (BP/TSE)"],
+  ["6c","Establish a centralized logistics center"],
+  ["6d","Streamline back-office function"],
+  ["6e","Conduct organizational diagnostics"],
+  ["6f","Establish culture & engagement baseline"],
+  ["6g","Reshape workforce operating model"],
+  ["6h","Redesign performance management & pay-for-performance"],
+  ["6i","Win, build & upskill talent – 4B talent & Leadership"],
+].map(r=>({id:r[0],l:r[1],cat:r[0][0]}));
+
+/* time horizon per initiative (from slide shading): short=blue, mid=light grey, long=dark grey */
+const HZ={
+  "1a":"short","1c":"short","2a":"short","3a":"short","3b":"short","3c":"short","3f":"short",
+  "1b":"short","2c":"short","3d":"short","4a":"short","4b":"short","4c":"short",
+  "5a":"short","5b":"short","5c":"short","6a":"short","6b":"short","6c":"short","6d":"short",
+  "4f":"long","4g":"long","5f":"long","5e":"long",
+  "1d":"mid","1e":"mid","1f":"mid","1g":"mid","1h":"mid","2b":"mid","3e":"mid",
+  "4d":"mid","4e":"mid","5d":"mid","6e":"mid","6f":"mid","6g":"mid","6h":"mid","6i":"mid"
+};
+NODES.forEach(n=>n.h=HZ[n.id]||"short");
+
+let DEPS = [
+  ["1b","1c"],
+  ["1b","1g"],
+  ["1d","1e"],
+  ["1e","1f"],
+  ["1e","1g"],
+  ["1e","1h"],
+  ["2a","2b"],
+  ["2b","2c"],
+  ["2c","2a"],
+  ["2c","3a"],
+  ["3a","1a"],
+  ["3a","3b"],
+  ["3c","3b"],
+  ["3d","3e"],
+  ["3d","6a"],
+  ["3f","2c"],
+  ["3f","3a"],
+  ["4a","4f"],
+  ["4a","6b"],
+  ["4b","6d"],
+  ["4c","4d"],
+  ["4c","6c"],
+  ["4d","4e"],
+  ["4d","6a"],
+  ["4f","4g"],
+  ["5a","1b"],
+  ["5a","1c"],
+  ["5a","1d"],
+  ["5a","2a"],
+  ["5a","2b"],
+  ["5a","2c"],
+  ["5a","3c"],
+  ["5a","5c"],
+  ["5a","5d"],
+  ["5a","5e"],
+  ["5b","3c"],
+  ["5b","5a"],
+  ["5c","6b"],
+  ["5d","5e"],
+  ["5d","5f"],
+  ["5e","1c"],
+  ["5f","1d"],
+  ["5f","3c"],
+  ["5f","5a"],
+  ["5f","5c"],
+  ["5f","5e"],
+  ["5f","1b"],
+  ["5f","1c"],
+  ["5f","1g"],
+  ["5f","2a"]
+];
+
+const CATNAME={1:"Value creation model",2:"Customer management",3:"Sales & channel",4:"Technology & platform",5:"Data & intelligence",6:"Organization & people"};
+/* horizon color coding */
+const HZNAME={short:"Short term",mid:"Mid term",long:"Long term"};
+const HZCOL ={short:"#22A3DF",mid:"#C3CDD4",long:"#5B6B76"};
+/* concentric ring radius by horizon: nearer = smaller */
+const HZR   ={short:260,mid:440,long:620};
+let showDep=true;
+
+const legend=document.getElementById('legend');
+["short","mid","long"].forEach(k=>{
+  legend.insertAdjacentHTML('beforeend',`<span class="chip"><i class="dot" style="background:${HZCOL[k]}"></i>${HZNAME[k]}</span>`);
+});
+
+const viz=document.getElementById('viz'),tip=document.getElementById('tip');
+let svg,root,W,H;
+function initSVG(){
+  d3.select('#viz svg').remove();
+  W=viz.clientWidth;H=viz.clientHeight;
+  svg=d3.select('#viz').append('svg').attr('viewBox',[-W/2,-H/2,W,H]);
+  root=svg.append('g');
+  svg.call(d3.zoom().scaleExtent([.4,4]).on('zoom',e=>root.attr('transform',e.transform)));
+}
+function layout(){
+  const ordered=[...NODES].sort((a,b)=> a.cat===b.cat ? a.id.localeCompare(b.id) : a.cat-b.cat);
+  const N=ordered.length;
+  /* angle preserved from single-ring index; radius now depends on horizon (short inner, long outer) */
+  ordered.forEach((n,i)=>{
+    n.angle=(-Math.PI/2)+(2*Math.PI)*(i/N);
+    n.r=HZR[n.h];
+    n.x=Math.cos(n.angle)*n.r; n.y=Math.sin(n.angle)*n.r;
+  });
+  const Rinit=Math.max(...Object.values(HZR));
+  return {ordered,Rinit};
+}
+function draw(){
+  initSVG();
+  const {ordered,Rinit}=layout();
+  const nmap=Object.fromEntries(ordered.map(n=>[n.id,n]));
+  [HZR.short,HZR.mid,HZR.long].forEach(r=>root.append('circle').attr('r',r).attr('fill','none').attr('stroke','#eef3f6'));
+
+  /* dependency links: initiative-to-initiative only, curved inward */
+  const linkG=root.append('g');
+  const linkSel=linkG.selectAll('path').data(showDep?DEPS.filter(d=>nmap[d[0]]&&nmap[d[1]]):[]).join('path')
+    .attr('class','link')
+    .attr('d',d=>{const s=nmap[d[0]],t=nmap[d[1]];const cx=(s.x+t.x)*0.3,cy=(s.y+t.y)*0.3;return `M${s.x},${s.y} Q${cx},${cy} ${t.x},${t.y}`;});
+
+  const nodeSel=root.append('g').selectAll('g').data(ordered).join('g')
+    .attr('class','node').attr('transform',n=>`translate(${n.x},${n.y})`);
+  nodeSel.append('circle').attr('r',24).attr('fill',n=>HZCOL[n.h]);
+  nodeSel.append('text').attr('class','code').attr('text-anchor','middle').attr('dy','.32em')
+    .attr('fill',n=>n.h==='mid'?'#1a2b38':'#fff').text(n=>n.id);
+
+  /* labels rotated to the node's radial angle; always offset OUTWARD, text kept upright */
+  const NODE_R=24, GAP=14, OFF=NODE_R+GAP;
+  nodeSel.each(function(n){
+    const deg=n.angle*180/Math.PI, flip=(deg>90||deg<-90);
+    // rotate to spoke, move outward by OFF; if left half, rotate text 180° in place to stay upright
+    const g=d3.select(this).append('g')
+      .attr('transform',`rotate(${deg}) translate(${OFF},0) ${flip?'rotate(180)':''}`);
+    const t=g.append('text').attr('class','lbl').attr('text-anchor',flip?'end':'start');
+    wrap(t,n.l);
+  });
+  function wrap(textSel,str){
+    const words=str.split(/\s+/);
+    let best=1e9, cut=words.length;
+    for(let i=1;i<words.length;i++){
+      const a=words.slice(0,i).join(' ').length, b=words.slice(i).join(' ').length;
+      if(Math.abs(a-b)<best){best=Math.abs(a-b);cut=i;}
+    }
+    const lines = words.length<=1 ? [str] : [words.slice(0,cut).join(' '), words.slice(cut).join(' ')];
+    const lh=20, y0=-(lines.length-1)*lh/2;   // block vertical center on the radial line through the node
+    lines.forEach((ln,i)=>textSel.append('tspan').attr('x',0).attr('y',y0+i*lh).attr('dy','.32em').text(ln));
+  }
+
+  const adj={};ordered.forEach(n=>adj[n.id]=new Set([n.id]));
+  DEPS.forEach(d=>{if(adj[d[0]]&&adj[d[1]]){adj[d[0]].add(d[1]);adj[d[1]].add(d[0]);}});
+  nodeSel.on('mouseenter',(e,d)=>hover(d))
+    .on('mousemove',e=>{tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';})
+    .on('mouseleave',clear).on('click',(e,d)=>{e.stopPropagation();hover(d,true);});
+  svg.on('click',clear);
+  function hover(d){
+    const set=adj[d.id];
+    nodeSel.classed('dim',n=>!set.has(n.id));
+    linkSel.classed('hi',l=>l[0]===d.id||l[1]===d.id).classed('dim',l=>!(l[0]===d.id||l[1]===d.id));
+    const rel=[...new Set([
+      ...DEPS.filter(l=>l[0]===d.id).map(l=>l[1]),
+      ...DEPS.filter(l=>l[1]===d.id).map(l=>l[0])
+    ])].join(', ')||'—';
+    tip.innerHTML=`<b>${d.id}</b> ${d.l}<br><span style="opacity:.7">${HZNAME[d.h]}</span>`
+      +`<br><span style="color:#8fd3f4">Dependency:</span> ${rel}`;
+    tip.style.opacity=1;
+  }
+  function clear(){nodeSel.classed('dim',false);linkSel.classed('hi',false).classed('dim',false);tip.style.opacity=0;}
+
+  // auto-fit: scale viewBox to the drawn content so nothing is clipped on load
+  requestAnimationFrame(()=>{
+    const bb=root.node().getBBox(); const pad=24;
+    svg.attr('viewBox',[bb.x-pad,bb.y-pad,bb.width+2*pad,bb.height+2*pad]);
+  });
+
+  renderDataTable();
+}
+function renderDataTable(){
+  const wrap=document.getElementById('dataTableWrap'); if(!wrap) return;
+  const depsBy=id=>[...new Set([
+    ...DEPS.filter(l=>l[0]===id).map(l=>l[1]),
+    ...DEPS.filter(l=>l[1]===id).map(l=>l[0])
+  ])].join(', ')||'—';
+  const rows=NODES.map(n=>`<tr>
+    <td style="text-align:center"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:${HZCOL[n.h]};color:${n.h==='mid'?'#1a2b38':'#fff'};font-size:10px;font-weight:700;line-height:20px">${n.id}</span></td>
+    <td>${n.l}</td>
+    <td>${HZNAME[n.h]}</td>
+    <td style="color:var(--muted)">${depsBy(n.id)}</td></tr>`).join('');
+  wrap.innerHTML=`<table><thead><tr><th>Code</th><th>Initiative</th><th>Horizon</th><th>Dependency</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+function buildTable(){
+  const rows=NODES.map((n,i)=>`<tr data-i="${i}">
+    <td contenteditable data-k="id">${n.id}</td>
+    <td contenteditable data-k="l">${n.l}</td>
+    <td contenteditable data-k="h">${n.h}</td></tr>`).join('');
+  document.getElementById('tblNodes').innerHTML=
+    `<table><thead><tr><th>Code</th><th>Initiative</th><th>Horizon<br><span style="font-weight:400;color:#6b7d8a">short/mid/long</span></th></tr></thead><tbody>${rows}</tbody></table>`;
+  document.querySelectorAll('#tblNodes td[contenteditable]').forEach(td=>{
+    td.addEventListener('blur',()=>{
+      const i=+td.closest('tr').dataset.i,k=td.dataset.k,v=td.textContent.trim();
+      NODES[i][k]=v; if(k==='id')NODES[i].cat=v[0];
+      draw();
+    });
+  });
+  document.getElementById('depEdit').value=DEPS.map(d=>d.join(',')).join('\n');
+}
+document.getElementById('btnDep').onclick=e=>{showDep=!showDep;e.target.classList.toggle('on',showDep);draw();};
+document.getElementById('btnTable').onclick=()=>{document.getElementById('panel').classList.add('open');buildTable();setTimeout(draw,220);};
+document.getElementById('btnClose').onclick=()=>{document.getElementById('panel').classList.remove('open');setTimeout(draw,220);};
+document.getElementById('btnApplyDep').onclick=()=>{
+  DEPS=document.getElementById('depEdit').value.split('\n').map(l=>l.trim()).filter(Boolean)
+      .map(l=>l.split(',').map(s=>s.trim())).filter(a=>a.length===2);draw();};
+document.getElementById('btnExport').onclick=()=>{
+  const nc="code,initiative,horizon\n"+NODES.map(n=>[n.id,`"${n.l}"`,n.h].join(',')).join('\n');
+  const dc="source,target\n"+DEPS.map(d=>d.join(',')).join('\n');
+  dl("initiatives_nodes.csv",nc);dl("initiatives_deps.csv",dc);};
+function dl(name,txt){const b=new Blob([txt],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+document.getElementById('btnToggleData').onclick=e=>{
+  const w=document.getElementById('dataTableWrap');
+  const hidden=w.style.display==='none';
+  w.style.display=hidden?'':'none';
+  e.target.classList.toggle('on',hidden);
+  e.target.textContent=hidden?'Hide table':'Show table';
+};
+window.addEventListener('resize',draw);
+draw();
+</script>
+</body>
+</html>
