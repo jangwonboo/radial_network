@@ -1,6 +1,6 @@
-import { SignJWT } from 'jose';
+const { SignJWT } = require('jose');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const { email } = req.body || {};
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     .filter(Boolean);
 
   if (!invited.includes(email.trim().toLowerCase())) {
-    // Return same message to avoid email enumeration
+    // Same response to avoid email enumeration
     return res.status(200).json({ ok: true });
   }
 
@@ -54,4 +54,4 @@ export default async function handler(req, res) {
   }
 
   res.json({ ok: true, otpToken });
-}
+};

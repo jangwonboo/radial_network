@@ -1,6 +1,6 @@
-import { jwtVerify, SignJWT } from 'jose';
+const { jwtVerify, SignJWT } = require('jose');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const { otp, otpToken } = req.body || {};
@@ -29,4 +29,4 @@ export default async function handler(req, res) {
     `session=${session}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=86400`
   );
   res.json({ ok: true });
-}
+};

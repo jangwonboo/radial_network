@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Strategy House — Radial Network</title>
+<script>
+  // Session guard: check before rendering anything
+  (async()=>{
+    try{
+      const r=await fetch('/api/check-session');
+      if(!r.ok) window.location.replace('/login');
+    }catch{
+      window.location.replace('/login');
+    }
+  })();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <style>
   :root{--navy:#051C2C;--sky:#22A3DF;--ink:#1a2b38;--muted:#6b7d8a;--line:#c9d6df;--bg:#ffffff;--vision:#051C2C}

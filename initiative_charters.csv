@@ -1,0 +1,99 @@
+﻿No.,Initiative Title,Scope & Description
+1a,Develop industry-specific packages and pitchbooks,"Build and distribute pitchbooks for the 4 prioritized verticals to help sales reps meet target sales, covering each vertical's customer needs, pain points, hooking messages, and differentiation vs. competitors
+• Manufacturing, Smart Order, healthcare, public institutions"
+1b,Renegotiate margin-dilutive contracts,"Restore profitability on margin-dilutive existing contracts, especially on other financial-institution accounts (e.g., ATM) with negative CLTV ('NICE' Case)
+• Negotiated to uplift monthly fee by 11M total
+• Demarketed 4,000 VAN contracts (28% of total 14K)"
+1c,Raise monthly fees on existing customers and restructure new-customer contracts,"Improve SKS profitability through systematic price increases for existing customers and price increase levers for new customers
+• (Existing cust.) Opt-out based price increase requests
+• (New cust.) Enhancement of base RMR setting, multiplier application
+• (New cust.) Charing standard pricing for ""currently free"" add-ons
+• (New cust.) T&C duration extension to, Programmed price increases"
+1d,"Discover high-CLTV, high-value white space opportunities across captive and non-captive markets","Identify and validate high-value growth opportunities in emerging and underserved market segments:
+• Emerging verticals with strong growth potential (e.g., data centers)
+• Demographic and societal trends creating new security needs (e.g., elderly care facilities)
+• Across non captive & captive demand opportunities across the SK Group ecosystem"
+1e,Set up a customer-centric product innovation and lifecycle management workflow,"Set up a customer-centric product innovation workflow that:
+• Detects emerging operational/security risks in a timely, systematic manner and integrates market insights into new product development
+• Enables customers to proactively address emerging risks ahead of competitors, creating a sustainable competitive advantage"
+1f,Bundle cyber and security-adjacent services,"Bundle physical, cyber, and cyber-physical security with security-adjacent services into integrated enterprise packages
+• Combine currently-siloed physical and cyber-physical security into unified enterprise packages
+• Expand into untapped adjacencies (e.g., energy/utility monitoring, ESG/environmental compliance, occupancy/space analytics, EHS)"
+1g,"Scale standardized, low-cost, self-install products","Scale standardized, low-cost, self-install (DIY) products for price-sensitive segments
+• Standardize a low-cost product line without monitoring & dispatch for price-sensitive segments
+• Replace rep-led design/installation with customer self-install
+• Distribute through low-touch channels (online, retail, partners)"
+1h,Develop advanced technology-driven offerings,"Advance high-value offerings from commoditized hardware to differentiated, tech-enabled solutions
+• Shift high-value verticals from commoditized hardware to integrated solutions
+• Embed advanced capabilities (AI analytics, predictive/preventive security, platform integration)"
+2a,Define customer tiers with standard management playbooks by value,"Segment customer by CLTV and ARPU and deploy differentiated management scheme per tier to right-size effort to value
+• [Tier A]: High-touch, hands-on management by regional strategic and branch sales reps, with regular review cadence
+• [Tier B/C]: Centrally managed by dedicated CM team (see illustrative 2c), maximizing non-face-to-face and digital channels"
+2b,Systemize proactive customer management,"Systemize proactive management for high-value accounts, to protect and grow the most valuable relationships
+• Shift from reactive to proactive management
+• Use early-warning signals (usage, payment, service, engagement) to flag at-risk and growth accounts before churn
+• Drive account plans for upsell/cross-sell on high-value accounts"
+2c,Effective customer management through dedicated Customer Management team,"Establish a dedicated CM team to efficiently manage the previously under-served B/C tiers and optimize in-house sales focusing on high-value activities
+• Define CM team R&R, required FTEs and operating governance
+• Implement C360 to facilitate customer insight and engagement"
+3a,Industry-specialized sales teams,"After the agency transition, assign top 20% performers among remaining sales reps with more than 50% of sales generated from prioritized verticals to Regional Strategy. Regional strategy will not only drive direct sales in prioritized verticals, but also act as PMs, supporting branches to expand high-value vertical sales"
+3b,Penetration target-setting and execution,"Set Gross Add targets by vertical for the 4 prioritized high-value verticals, sized from region X vertical penetration gaps.
+Cascade vertical-level KPIs to regions and have HQ trackability
+• Target set at vertical-average PTR for under-penetrated regions
+• For Smart Order, target set at national market average self-order terminal adoption rate among restaurant clients by '28"
+3c,Redesign sales incentives around CLTV,"Redesign sales incentives into a payout matrix that varies by two axes — monthly fee tier and product tier
+• Payout rates scale up to 150% for higher-fee, high-value contracts
+• Payout rates as low as 50% for low-fee, low-value contracts
+• Incentive structure itself rewards contract value rather than volume"
+3d,Transition of in-house sales representatives to agency channel,"Convert low-performing sales reps across Regional strategy and Branch sales into high-productivity agencies, while supporting their successful onboarding and growth as agencies"
+3e,Scale online sales channel,Move beyond traditional door-to-door sales by scaling online channels under a clear CLTV-based pricing framework to expand geographic reach and customer coverage
+3f,Widen sales-coverage areas by easing geofence limits,"Remove geofence restrictions to expand the reach of top-performers, while preventing free-riding and inflated performance recognition by assigning sales credit and SIP exclusively to contract owners"
+4a,Apply AI to detect and reduce false alarms,"Minimize false alarm rate by adopting AI in detection to:
+• Reduce false alarms and unnecessary dispatches while maintaining security effectiveness
+• Reinvest operational savings into service quality improvements and broader operational excellence initiatives"
+4b,Adopt automation and AI tools to streamline back-office,"Apply AI agents and RPA (Robotic Process Automation) to repetitive reviews and administrative tasks to:
+• Capture a technology-enabled efficiency layer beyond Phase I organizational redesign"
+4c,Build SCM IT systems to optimize supply chain and logistics,"Enhance and develop related IT systems, including ERP, Blue Code, and Blue Supplier, to enable key functionalities required for integrated logistics operations (Initiative 6d), such as real-time inventory optimization and shipment tracking"
+4d,Improve ERP system to support the new GTM strategy,"Transform ERP into the enterprise backbone that:
+• Enables execution of the new GTM through integrated target-setting, performance management, and incentive mechanisms
+• Consolidates data across core business systems into a single source of truth for decision-making and operations mgmt."
+4e,Automate monitoring-center video surveillance,"Deploy AI-powered automated monitoring capabilities that:
+• Detect and prioritize security incidents in real time, enabling faster and more consistent responses
+• Reduce monitoring-center workload and operating costs, freeing resources for service and operational improvements"
+4f,"Revamp the security platform (IoT platform, Argos)","Build a unified security IT platform that:
+• Seamlessly integrates signals and information across connected devices and systems, enabling faster, more accurate responses
+• Optimize fleet-wide operations through intelligent resource orchestration, routing, and deployment"
+4g,Develop next-generation security technologies,"Develop and launch next-generation security solutions that:
+• Proactively catches emerging customer needs and evolving security risks
+• Deliver superior security outcomes through more efficient and effective technologies"
+5a,Construct CLTV single source of truth (SSOT) and decision-making rules,"Build a CLTV data foundation, since we have not measured CLTV before, and establish the rules and process for using it in decisions and keeping it continuously updated"
+5b,Build digital sales tools (Vision360),"Build a digital tool and dashboard (Vision360) that:
+• Gives HQ and RHQ a region X vertical view of TAM, penetration, and whitespace to set and track branch targets
+• Equips each branch with an actionable prospect list by vertical, so reps spend time selling rather than finding leads"
+5c,Optimize field operations (BP/TSE) using data,"Improve BP workforce efficiency through GPS-based workload optimization and predictive modeling, enabling data-driven realignment of dispatch territories and reducing FTEs"
+5d,Establish a holistic business intelligence system,"Consolidate fragmented data across function into a unified BI platform giving HQ, RHQ, and branch leaders a single, real-time view of business performance for data-driven decision making"
+5e,"Revamp C360 to analyze customers, predict churn, and target retention/upselling","Upgrade C360 into a proactive intelligence system that provides holistic customer insight based on interaction history, predicts churn risk and assists retention/upselling referencing customer information and sentiment"
+5f,Set up a data governance process,"Establish data foundation enabling all data-dependent initiatives:
+• Define data ownership by domain, setting quality standards and remediation protocols
+• Setup governance body to enforce consistency across all data assets"
+6a,Orchestrate ERP and agency transition plan,"Orchestrate a structured, sequenced workforce transition across two parallel tracks:
+• Sales → agency conversion
+• BP/TSE → natural attrition & hiring freeze
+• Others → ERP"
+6b,Redefine R&R and evaluation scheme of field operations (BP/TSE),"Enhance operational productivity and workforce efficiency by the clear division of R&R between BP and TSE
+• BPs were streamlined to focus on dispatch operations, while TSEs assumed responsibility for installation, AS service, and technical support activities"
+6c,Establish a centralized logistics center,"Increase operational efficiency and lower logistics outsourcing costs
+• By centralizing material mgmt. and shifting from bulk deliveries to branches toward project-based delivery operations"
+6d,Streamline back-office function,"Consolidate fragmented, duplicated, and non-core manual work into a leaner support organization
+• 734 employees across 5 divisions, 5 HQs, 2 Deputy CFO organizations, 10 regional HQs, 21 groups, and 80 teams"
+6e,Conduct organizational diagnostics,"Purpose — an objective baseline of structure and leadership capability before scaling change: not just how we are organized, but whether our people-managers and leaders can lead the change
+• (1) Structure: span-of-control, layers & Org. Network Analysis across Physical · Cyber · Convergence
+• (2) Leadership: define a success profile and assess people-managers & the leadership group against it"
+6f,Establish culture and engagement baseline,"The measurable starting line for the high-performing-culture pillar
+• Enterprise engagement & culture baseline survey: Vision, Leadership, Change mgmt, Org.Structure, IT/Tech, Talent & Development, Culture, engagement and values: SK Shieldus"
+6g,Reshape workforce operating model,"Define what work is done, by whom, in what structure and governance
+• Target operating model for the post-optimization organization — sourcing logic (in-house · BP · agency · AI), role architecture and decision rights, institutionalized"
+6h,Redesign performance management and pay-for-performance,"Revisit the performance management system
+Goal cascading, role-based assessment, pay-for-performance and data-driven decisions on a psychological-safety foundation, sustaining a high-performing culture"
+6i,"Win, build and upskill talent — 4B talent and leadership","Build the talent engine for sustained growth
+• 4B: Build · Buy · Borrow · Bind — with critical-role succession, a leadership accelerator, AI/digital upskilling and EVP redesign"
