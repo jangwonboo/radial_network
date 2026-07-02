@@ -83,6 +83,9 @@ $('btnSend').onclick = async () => {
     show($('step2'), true);
     $('otp').focus();
     startTimer(600);
+    if (data.emailError) {
+      $('err2').textContent = '이메일 발송에 문제가 있습니다. 관리자에게 문의하거나 Vercel 로그에서 코드를 확인하세요.';
+    }
   } catch (e) {
     $('err1').textContent = e.message;
   } finally {
