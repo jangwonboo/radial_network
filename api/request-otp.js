@@ -12,7 +12,6 @@ module.exports = async function handler(req, res) {
     .filter(Boolean);
 
   if (!invited.includes(email.trim().toLowerCase())) {
-    // Same response to avoid email enumeration
     return res.status(200).json({ ok: true });
   }
 
@@ -24,14 +23,16 @@ module.exports = async function handler(req, res) {
     .setExpirationTime('10m')
     .sign(secret);
 
-  const r = await fetch('https://api.resend.com/emails', {
+  const fromEmail = process.env.OTP_FROM_EMAIL || 'onboarding@resend.dev';
+
+  const resendRes = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: process.env.OTP_FROM_EMAIL || 'onboarding@resend.dev',
+      from: fromEmail,
       to: email.trim(),
       subject: 'Strategy House — 로그인 코드',
       html: `
@@ -47,10 +48,13 @@ module.exports = async function handler(req, res) {
     }),
   });
 
-  if (!r.ok) {
-    const err = await r.text();
-    console.error('Resend error:', err);
-    return res.status(500).json({ error: 'Failed to send email' });
+  const resendBody = await resendRes.json();
+
+  if (!resendRes.ok) {
+    console.error('Resend error:', JSON.stringify(resendBody));
+    return res.status(500).json({
+      error: `이메일 발송 실패: ${resendBody.message || resendBody.name || JSON.stringify(resendBody)}`,
+    });
   }
 
   res.json({ ok: true, otpToken });
